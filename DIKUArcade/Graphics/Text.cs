@@ -47,6 +47,8 @@ namespace DIKUArcade.Graphics {
             fontSize = 50;
             font = new Font("Arial", fontSize);
 
+            if (!Utilities.Globals.IsGraphicsEnabled) return;
+
             // create a texture id
             textureId = GL.GenTexture();
 

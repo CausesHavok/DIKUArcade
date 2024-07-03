@@ -15,11 +15,6 @@ namespace DIKUArcade.Graphics {
         private int textureId;
 
         public Texture(string filename) {
-            // create a texture id
-            textureId = GL.GenTexture();
-
-            // bind this new texture id
-            BindTexture();
 
             // find base path
             var dir = new DirectoryInfo(Path.GetDirectoryName(
@@ -37,6 +32,15 @@ namespace DIKUArcade.Graphics {
             {
                 throw new FileNotFoundException($"Error: The file \"{path}\" does not exist.");
             }
+
+            if (!Utilities.Globals.IsGraphicsEnabled) return;
+
+            // create a texture id
+            textureId = GL.GenTexture();
+
+            // bind this new texture id
+            BindTexture();
+
             System.Drawing.Bitmap image = new System.Drawing.Bitmap(path);
             BitmapData data = image.LockBits(new System.Drawing.Rectangle(0, 0, image.Width, image.Height),
                 ImageLockMode.ReadOnly, System.Drawing.Imaging.PixelFormat.Format32bppPArgb);
@@ -70,16 +74,6 @@ namespace DIKUArcade.Graphics {
 
         public Texture(string filename, int currentStride, int stridesInImage)
         {
-            if (currentStride < 0 || currentStride >= stridesInImage || stridesInImage < 0)
-            {
-                throw new ArgumentOutOfRangeException(
-                    $"Invalid stride numbers: ({currentStride}/{stridesInImage})");
-            }
-            // create a texture id
-            textureId = GL.GenTexture();
-
-            // bind this new texture id
-            BindTexture();
 
             // find base path
             var dir = new DirectoryInfo(Path.GetDirectoryName(
@@ -97,6 +91,21 @@ namespace DIKUArcade.Graphics {
             {
                 throw new FileNotFoundException($"Error: The file \"{path}\" does not exist.");
             }
+
+            if (currentStride < 0 || currentStride >= stridesInImage || stridesInImage < 0)
+            {
+                throw new ArgumentOutOfRangeException(
+                    $"Invalid stride numbers: ({currentStride}/{stridesInImage})");
+            }
+
+            if (!Utilities.Globals.IsGraphicsEnabled) return;
+
+            // create a texture id
+            textureId = GL.GenTexture();
+
+            // bind this new texture id
+            BindTexture();
+
             System.Drawing.Bitmap image = new System.Drawing.Bitmap(path);
             var width = (int)((float)image.Width / (float)stridesInImage);
             var posX = currentStride * width;
